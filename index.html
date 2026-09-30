@@ -36,23 +36,23 @@ nav ul a:hover::after{transform:scaleX(1);transform-origin:left}
 #mus{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;font-size:1rem;transition:.3s}
 #mus:hover,#mus[aria-pressed=true]{background:var(--gold);color:var(--bg);border-color:var(--gold);box-shadow:0 0 24px rgba(217,169,79,.6)}
 #bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--mar),var(--gold),var(--gold2));z-index:60;width:0;box-shadow:0 0 12px var(--gold)}
-#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:14vh;max-width:1500px}
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:14vh 3vw 6vh;max-width:none;width:100%}
 .tag{display:inline-flex;gap:.6rem;align-items:center;border:1px solid var(--gold);border-radius:99px;padding:.4rem 1.1rem;width:fit-content;margin-bottom:1.6rem;background:rgba(107,20,32,.35);color:var(--gold2)}
 .tag::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px var(--gold);animation:pl 1.6s infinite}
 @keyframes pl{50%{opacity:.25}}
 #hero{perspective:1200px}
-h1{font:800 clamp(3.8rem,17.5vw,17rem)/.82;letter-spacing:-.065em;text-transform:uppercase;transform-style:preserve-3d;transition:transform .15s linear;will-change:transform}
+h1{font:800 clamp(4rem,19vw,30rem)/.8;letter-spacing:-.06em;text-transform:uppercase;transform-style:preserve-3d;transition:transform .15s linear;will-change:transform}
 h1 span{display:block;overflow:visible;padding:.04em 0;white-space:nowrap}
-h1 .a i b{background:linear-gradient(180deg,#fff6dc 0%,var(--fg) 40%,var(--gold2) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+h1 .a i b{-webkit-text-stroke:.025em var(--fg);background:linear-gradient(180deg,#fff6dc 0%,var(--fg) 40%,var(--gold2) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 h1 .a{filter:drop-shadow(0 5px 0 var(--mar)) drop-shadow(0 12px 0 var(--mar2)) drop-shadow(0 28px 36px rgba(0,0,0,.9))}
 h1 .a i b{animation:sh2 4s ease-in-out infinite}
 @keyframes sh2{50%{filter:brightness(1.35)}}
 @keyframes sh{to{background-position:-250% 0}}
-h1 .o i b{background:linear-gradient(180deg,var(--gold2) 0%,var(--gold) 55%,#8c6220 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+h1 .o i b{-webkit-text-stroke:.025em var(--gold);background:linear-gradient(180deg,var(--gold2) 0%,var(--gold) 55%,#8c6220 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 h1 .o{filter:drop-shadow(0 4px 0 #6b1420) drop-shadow(0 10px 0 #3d0c14) drop-shadow(0 0 26px rgba(217,169,79,.4)) drop-shadow(0 24px 30px rgba(0,0,0,.9))}
 h1 i{display:inline-block;font-style:normal;transform:translateY(60%) rotateX(-80deg);opacity:0;animation:up 1.1s cubic-bezier(.2,.9,.2,1) forwards;animation-play-state:paused;transform-origin:50% 100%}
 h1 i b{display:inline-block;font-weight:inherit;transition:transform .35s cubic-bezier(.2,.9,.2,1)}
-h1 i b:hover{transform:translateZ(80px) translateY(-.08em) scale(1.12)}
+h1 i b:hover{transform:translateY(-.04em)}
 body.go h1 i{animation-play-state:running}
 @keyframes up{to{transform:none;opacity:1}}
 .sub{font:italic 400 clamp(1.5rem,3vw,2.5rem)/1.2 var(--s);max-width:24ch;margin:2.2rem 0;color:var(--gold2)}
@@ -229,8 +229,11 @@ if(on){ac=ac||new (window.AudioContext||window.webkitAudioContext)();const g=ac.
 else{nodes.g&&nodes.g.gain.linearRampToValueAtTime(0,ac.currentTime+.6);setTimeout(()=>{nodes.forEach(n=>n.stop());nodes=[]},700)}};
 /* split title letters for stagger + hover depth */
 $$('#t i').forEach((el,r)=>{el.outerHTML=[...el.textContent].map((c,k)=>`<i style="animation-delay:${(r*.35+k*.06).toFixed(2)}s"><b>${c}</b></i>`).join('')});
+/* auto-fit each name line to the full screen width so it is as BIG as possible */
+function fit(){const h=$('#t');const w=h.clientWidth*.58;$$('#t span').forEach(sp=>{sp.style.cssText='font-size:100px;display:inline-block';const k=sp.offsetWidth;sp.style.cssText='display:block;font-size:'+(100*w/k)+'px'})}
+fit();(document.fonts&&document.fonts.ready||Promise.resolve()).then(fit);addEventListener('resize',fit);addEventListener('load',fit);
 /* 3D tilt of hero title */
-const T=$('#t');addEventListener('mousemove',e=>{if(scrollY<innerHeight)T.style.transform=`rotateY(${(e.clientX/innerWidth-.5)*16}deg) rotateX(${(.5-e.clientY/innerHeight)*12}deg)`});
+const T=$('#t');addEventListener('mousemove',e=>{if(scrollY<innerHeight)T.style.transform=`rotateY(${(e.clientX/innerWidth-.5)*5}deg) rotateX(${(.5-e.clientY/innerHeight)*4}deg)`});
 if(window.THREE&&!RM){
 const R=new THREE.WebGLRenderer({canvas:$('#gl'),alpha:true,antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
 const S=new THREE.Scene();S.fog=new THREE.FogExp2(0x0a0506,.028);
@@ -261,7 +264,7 @@ let t=0,tx=0,ty=0,sp=0,ls=scrollY,cz=9,hist=[];addEventListener('mousemove',e=>{
 (function a(){t+=.01;const H=document.documentElement,pr=scrollY/Math.max(1,H.scrollHeight-innerHeight);
 sp+=(Math.abs(scrollY-ls)-sp)*.1;ls=scrollY;
 const tz=9-pr*150;cz+=(tz-cz)*.06;C.position.z=cz;
-C.fov=60+Math.min(sp*.9,35);C.updateProjectionMatrix();
+C.fov=60+Math.min(sp*.25,8);C.updateProjectionMatrix();
 C.position.x+=(tx*3+Math.sin(pr*12)*1.5-C.position.x)*.05;C.position.y+=(-ty*2.2+Math.cos(pr*9)*1-C.position.y)*.05;
 C.lookAt(Math.sin(pr*12)*.6,0,cz-12);C.rotation.z+=(tx*-.12+sp*.002*Math.sin(t)-C.rotation.z)*.05;
 core.rotation.x=t*.4;core.rotation.y=t*.6;c2.rotation.z=-t*1.5;c3.rotation.x=t*.9;core.position.set(3.2-pr*30,0,0);
